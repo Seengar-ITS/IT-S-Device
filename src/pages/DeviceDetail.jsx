@@ -1,0 +1,4 @@
+import React,{useEffect,useState}from'react';import{supabase}from'../lib/supabase.js';import{requireAuth}from'../lib/auth.js';import*as S from'../styles.js';
+export default function DeviceDetail(){const id=window.location.pathname.split('/')[2];const[d,setD]=useState(null);useEffect(()=>{requireAuth(window.location.href);supabase.from('registered_devices').select('*').eq('id',id).single().then(({data})=>setD(data));},[id]);
+if(!d)return React.createElement('div',{style:S.page},React.createElement('p',{style:S.muted},'Loading...'));
+return React.createElement('div',{style:S.page},React.createElement('h1',{style:S.h1},d.device_name||'Device'),[['Type',d.device_type],['OS',d.os],['Last Seen',d.last_seen?new Date(d.last_seen).toLocaleString():'Never']].map(([k,v])=>React.createElement('div',{key:k,style:S.card},React.createElement('p',{style:S.muted},k),React.createElement('p',null,v||'—'))));}
